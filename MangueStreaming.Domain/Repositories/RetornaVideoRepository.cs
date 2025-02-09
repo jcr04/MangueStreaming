@@ -7,5 +7,6 @@ namespace MangueStreaming.Domain.Repositories
     public interface IRetornaVideoRepository
     {
         Task<VideoUrlDto?> GetByIdAsync(Guid id);
+        Task<List<VideoUrlDto>> GetAllAsync();
     }
 }

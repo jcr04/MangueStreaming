@@ -25,5 +25,9 @@
 		<ProjectReference Include="..\MangueStreaming.Infra\MangueStreaming.Infra.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="wwwroot\" />
+	</ItemGroup>
+
 </Project>
 

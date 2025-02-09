@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MangueStreaming.Domain.Models;
 using MangueStreaming.Domain.Repositories;
@@ -27,6 +28,17 @@ namespace MangueStreaming.Infra.Repositories
                     Url = v.Url
                 })
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<VideoUrlDto>> GetAllAsync()
+        {
+            return await _context.Videos
+                .Select(v => new VideoUrlDto
+                {
+                    Id = v.Id,
+                    Url = v.Url
+                })
+                .ToListAsync();
         }
     }
 }

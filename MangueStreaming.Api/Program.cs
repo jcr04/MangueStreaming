@@ -23,6 +23,7 @@ builder.Services.AddScoped<ICommandHandler<CreateVideoCommand, Guid>, CreateVide
 //RetornarVideo
 builder.Services.AddScoped<IRetornaVideoRepository, RetornaVideoRepository>();
 builder.Services.AddScoped<ICommandHandler<RetornaVideoCommand, VideoUrlDto?>, RetornaVideoCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<RetornaTodosVideosCommand, List<VideoUrlDto>>, RetornaTodosVideosCommandHandler>();
 
 
 // Adicionar controllers
