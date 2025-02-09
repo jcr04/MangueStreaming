@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MangueStreaming.Domain\MangueStreaming.Domain.csproj" />
+    <ProjectReference Include="..\MangueStreaming.Infra\MangueStreaming.Infra.csproj" />
+  </ItemGroup>
+
+</Project>
