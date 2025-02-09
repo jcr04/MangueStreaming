@@ -25,7 +25,8 @@ namespace MangueStreaming.Infra.Repositories
                 .Select(v => new VideoUrlDto
                 {
                     Id = v.Id,
-                    Url = v.Url
+                    Url = v.Url,
+                    Title = v.Title,
                 })
                 .FirstOrDefaultAsync();
         }
@@ -36,7 +37,8 @@ namespace MangueStreaming.Infra.Repositories
                 .Select(v => new VideoUrlDto
                 {
                     Id = v.Id,
-                    Url = v.Url
+                    Url = v.Url,
+                    Title = v.Title,
                 })
                 .ToListAsync();
         }

@@ -53,10 +53,11 @@ namespace MangueStreaming.Api.Controllers
                 return NotFound();
             }
 
-            // Converte o caminho local em uma URI do tipo file:///
-            var fileUri = new Uri(videoDto.Url).AbsoluteUri;
-            return Ok(new { url = fileUri });
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            var clickableUrl = $"{baseUrl}/api/Videos/play/{id}";
+            return Ok(new { url = clickableUrl });
         }
+
 
         /// <summary>
         /// Retorna os metadados de todos os vídeos (cada um com a URL clicável).
@@ -67,16 +68,41 @@ namespace MangueStreaming.Api.Controllers
             var command = new RetornaTodosVideosCommand();
             var videoList = await _retornaTodosVideosCommandHandler.Handle(command, CancellationToken.None);
 
-            // Converte cada caminho local em uma URI do tipo file:///.
-            // Caso videoDto.Url seja, por exemplo, "C:\Users\Usuario\Documents\videos\video1.mp4"
-            // new Uri(...) gerará "file:///C:/Users/Usuario/Documents/videos/video1.mp4"
+            // Obtenha a base URL, ex.: "https://localhost:7159"
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            // Para cada vídeo, construa a URL para o endpoint de streaming (play)
             var result = videoList.Select(video => new
             {
                 id = video.Id,
-                url = new Uri(video.Url).AbsoluteUri
+                url = $"{baseUrl}/api/Videos/play/{video.Id}",
+                title = video.Title,
             }).ToList();
 
             return Ok(result);
+        }
+
+
+        [HttpGet("play/{id:guid}")]
+        public async Task<IActionResult> PlayVideo(Guid id)
+        {
+            var command = new RetornaVideoCommand(id);
+            var videoDto = await _retornaVideoCommandHandler.Handle(command, CancellationToken.None);
+            if (videoDto == null)
+            {
+                return NotFound("Vídeo não encontrado.");
+            }
+
+            if (!System.IO.File.Exists(videoDto.Url))
+            {
+                return NotFound("Arquivo de vídeo não encontrado.");
+            }
+
+            var stream = new FileStream(videoDto.Url, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            // Opcional: configure Content-Disposition para exibir inline
+            Response.Headers.Add("Content-Disposition", "inline; filename=\"video.mp4\"");
+
+            return new FileStreamResult(stream, "video/mp4");
         }
     }
 }
